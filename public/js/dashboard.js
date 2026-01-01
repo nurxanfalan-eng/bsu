@@ -1,10 +1,25 @@
 // Dashboard Functionality with Baku Time (UTC+4) and Auto-scroll
 
-const socket = io();
+const socket = io({
+    transports: ['websocket', 'polling']
+});
 let currentUser = null;
 let currentFaculty = null;
 let currentPrivateChat = null;
 let blockedUsers = new Set();
+
+// Socket connection events
+socket.on('connect', () => {
+    console.log('Socket connected:', socket.id);
+});
+
+socket.on('disconnect', () => {
+    console.log('Socket disconnected');
+});
+
+socket.on('connect_error', (error) => {
+    console.error('Socket connection error:', error);
+});
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -23,11 +38,14 @@ async function loadCurrentUser() {
         
         currentUser = await response.json();
         
+        console.log('Current user loaded:', currentUser);
+        
         // Update UI with user info
         updateUserProfile();
         
         // Join socket
         socket.emit('join', currentUser.id);
+        console.log('Sent join event with userId:', currentUser.id);
         
     } catch (error) {
         console.error('Error loading user:', error);
@@ -70,6 +88,7 @@ function initializeSocketListeners() {
     
     // Faculty message
     socket.on('faculty-message', (message) => {
+        console.log('Received faculty message:', message);
         if (currentFaculty === currentUser.faculty) {
             appendFacultyMessage(message);
         }
@@ -275,6 +294,7 @@ function sendMessage() {
     
     if (!text) return;
     
+    console.log('Sending message:', text, 'to faculty:', currentFaculty);
     socket.emit('faculty-message', { text });
     input.value = '';
 }
