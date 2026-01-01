@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSU Chat - Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">
+                    <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="10" fill="#5B7FFF"/>
+                        <path d="M20 25L30 20L40 25V35C40 37.7614 37.7614 40 35 40H25C22.2386 40 20 37.7614 20 35V25Z" fill="white"/>
+                        <path d="M30 30L25 27V33L30 36L35 33V27L30 30Z" fill="#5B7FFF"/>
+                    </svg>
+                </div>
+                <h2>BSU Chat</h2>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">
+                    <span id="userInitial">U</span>
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">İstifadəçi</h3>
+                    <p id="userFaculty">Fakültə</p>
+                </div>
+                <button class="profile-settings-btn" onclick="showProfileSettings()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89543 8 8 8.89543 8 10C8 11.1046 8.89543 12 10 12Z" fill="currentColor"/>
+                        <path d="M17.5 10C17.5 9.5 17.3 9 17 8.7L16.2 7.8C16.1 7.5 16.1 7.1 16.2 6.8L16.8 5.6C17 5.2 16.9 4.7 16.6 4.4L15.6 3.4C15.3 3.1 14.8 3 14.4 3.2L13.2 3.8C12.9 3.9 12.5 3.9 12.2 3.8L11.3 3C11 2.7 10.5 2.5 10 2.5C9.5 2.5 9 2.7 8.7 3L7.8 3.8C7.5 3.9 7.1 3.9 6.8 3.8L5.6 3.2C5.2 3 4.7 3.1 4.4 3.4L3.4 4.4C3.1 4.7 3 5.2 3.2 5.6L3.8 6.8C3.9 7.1 3.9 7.5 3.8 7.8L3 8.7C2.7 9 2.5 9.5 2.5 10C2.5 10.5 2.7 11 3 11.3L3.8 12.2C3.9 12.5 3.9 12.9 3.8 13.2L3.2 14.4C3 14.8 3.1 15.3 3.4 15.6L4.4 16.6C4.7 16.9 5.2 17 5.6 16.8L6.8 16.2C7.1 16.1 7.5 16.1 7.8 16.2L8.7 17C9 17.3 9.5 17.5 10 17.5C10.5 17.5 11 17.3 11.3 17L12.2 16.2C12.5 16.1 12.9 16.1 13.2 16.2L14.4 16.8C14.8 17 15.3 16.9 15.6 16.6L16.6 15.6C16.9 15.3 17 14.8 16.8 14.4L16.2 13.2C16.1 12.9 16.1 12.5 16.2 12.2L17 11.3C17.3 11 17.5 10.5 17.5 10Z" stroke="currentColor" fill="none" stroke-width="1.5"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="sidebar-menu">
+                <button class="menu-item active" onclick="showRules()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 4H16V6H4V4ZM4 8H16V10H4V8ZM4 12H12V14H4V12Z" fill="currentColor"/>
+                    </svg>
+                    Qaydalar
+                </button>
+                <button class="menu-item" onclick="showFaculties()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 5L10 2L17 5V11C17 14.31 14.84 17.41 12 18C9.16 17.41 7 14.31 7 11H3V5Z" fill="currentColor"/>
+                    </svg>
+                    Fakültə Otaqları
+                </button>
+                <button class="menu-item" onclick="showPrivateChats()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M17 8C17 5.24 14.31 3 11 3C7.69 3 5 5.24 5 8C5 9.38 5.56 10.65 6.5 11.65L5 17L10.35 14.5C10.56 14.5 10.78 14.5 11 14.5C14.31 14.5 17 12.26 17 9.5" fill="currentColor"/>
+                    </svg>
+                    Şəxsi Mesajlar
+                </button>
+                <button class="menu-item logout-btn" onclick="logout()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M13 3L17 7L13 11M17 7H7M7 17H3V3H7" stroke="currentColor" fill="none" stroke-width="2"/>
+                    </svg>
+                    Çıxış
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topic Banner -->
+            <div class="topic-banner" id="topicBanner">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                </svg>
+                <span id="todayTopic">Günün mövzusu yüklənir...</span>
+            </div>
+
+            <!-- Rules Section -->
+            <div id="rulesSection" class="content-section">
+                <h2>BSU Chat Qaydaları</h2>
+                <div id="rulesContent" class="rules-content">
+                    Qaydalar yüklənir...
+                </div>
+            </div>
+
+            <!-- Faculties Section -->
+            <div id="facultiesSection" class="content-section" style="display: none;">
+                <h2>Fakültə Otaqları</h2>
+                <div id="facultiesList" class="faculties-grid">
+                    <!-- Faculties will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Chat Section -->
+            <div id="chatSection" class="content-section chat-section" style="display: none;">
+                <div class="chat-header">
+                    <button class="back-btn" onclick="backToFaculties()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <h2 id="chatTitle">Chat</h2>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will appear here -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="messageInput" placeholder="Mesaj yazın..." />
+                    <button id="sendBtn" onclick="sendMessage()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Private Chats Section -->
+            <div id="privateChatsSection" class="content-section" style="display: none;">
+                <h2>Şəxsi Mesajlar</h2>
+                <div id="privateChatsList" class="private-chats-list">
+                    <!-- Private conversations will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Private Chat Section -->
+            <div id="privateChatSection" class="content-section chat-section" style="display: none;">
+                <div class="chat-header">
+                    <button class="back-btn" onclick="backToPrivateChats()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="chat-user-info">
+                        <div class="chat-user-avatar" id="privateChatAvatar">
+                            <span id="privateChatInitial">U</span>
+                        </div>
+                        <div>
+                            <h2 id="privateChatName">İstifadəçi</h2>
+                            <p id="privateChatInfo" class="chat-user-subtitle">Fakültə</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-messages" id="privateChatMessages">
+                    <!-- Private messages will appear here -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="privateMessageInput" placeholder="Mesaj yazın..." />
+                    <button id="privateSendBtn" onclick="sendPrivateMessage()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Settings Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Profil Ayarları</h2>
+                <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-image-upload">
+                    <div class="profile-preview" id="profilePreview">
+                        <span id="profilePreviewInitial">U</span>
+                    </div>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="uploadProfileImage()">
+                    <button class="btn-secondary" onclick="document.getElementById('profileImageInput').click()">Şəkil Seç</button>
+                </div>
+                <div class="profile-details">
+                    <p><strong>Ad Soyad:</strong> <span id="modalUserName"></span></p>
+                    <p><strong>Email:</strong> <span id="modalUserEmail"></span></p>
+                    <p><strong>Fakültə:</strong> <span id="modalUserFaculty"></span></p>
+                    <p><strong>Dərəcə:</strong> <span id="modalUserDegree"></span></p>
+                    <p><strong>Kurs:</strong> <span id="modalUserCourse"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Context Menu -->
+    <div id="contextMenu" class="context-menu">
+        <button onclick="startPrivateChat()">Şəxsi mesaj</button>
+        <button onclick="blockUser()">Əngəllə</button>
+        <button onclick="reportUser()">Şikayət et</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

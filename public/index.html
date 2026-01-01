@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSU Chat - Daxil ol</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-box">
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="60" rx="10" fill="#5B7FFF"/>
+                    <path d="M20 25L30 20L40 25V35C40 37.7614 37.7614 40 35 40H25C22.2386 40 20 37.7614 20 35V25Z" fill="white"/>
+                    <path d="M30 30L25 27V33L30 36L35 33V27L30 30Z" fill="#5B7FFF"/>
+                </svg>
+            </div>
+            <h1>BSU Chat</h1>
+            <p class="subtitle">Daxil ol</p>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="input-group">
+                    <input type="email" id="loginEmail" placeholder="email@bsu.edu.az" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" placeholder="Şifrə" required>
+                </div>
+                <button type="submit" class="btn-primary">Daxil ol</button>
+                <p class="toggle-link">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 4C9.10457 4 10 4.89543 10 6C10 7.10457 9.10457 8 8 8C6.89543 8 6 7.10457 6 6C6 4.89543 6.89543 4 8 4ZM8 10C10.2091 10 12 10.8954 12 12V13H4V12C4 10.8954 5.79086 10 8 10Z" fill="currentColor"/>
+                    </svg>
+                    Hesabın yoxdur? <a href="#" onclick="showRegister(); return false;">Qeydiyyatdan keç</a>
+                </p>
+                <p class="toggle-link admin-link">
+                    <a href="/admin">Admin Paneli</a>
+                </p>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="input-group">
+                    <input type="text" id="regFullName" placeholder="Ad Soyad" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="regEmail" placeholder="email@bsu.edu.az" required>
+                </div>
+                <div class="input-group phone-input">
+                    <span class="phone-prefix">+994</span>
+                    <input type="tel" id="regPhone" placeholder="501234567" maxlength="9" required>
+                </div>
+                <div class="input-group">
+                    <select id="regFaculty" required>
+                        <option value="">Fakültə seçin</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="regDegree" required>
+                        <option value="">Dərəcə seçin</option>
+                        <option value="Bakalavr">Bakalavr</option>
+                        <option value="Magistr">Magistr</option>
+                        <option value="Doktorantura">Doktorantura</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="regCourse" required>
+                        <option value="">Kurs seçin</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="regPassword" placeholder="Şifrə" required>
+                </div>
+                
+                <div id="verificationSection" style="display: none;">
+                    <h3>Doğrulama Sualları</h3>
+                    <p class="verification-note">Minimum 2 sual düzgün cavablandırılmalıdır</p>
+                    <div id="verificationQuestions"></div>
+                </div>
+                
+                <button type="button" id="continueBtn" class="btn-primary">Davam et</button>
+                <button type="submit" id="registerBtn" class="btn-primary" style="display: none;">Qeydiyyatdan keç</button>
+                
+                <p class="toggle-link">
+                    Hesabın var? <a href="#" onclick="showLogin(); return false;">Daxil ol</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+</html>
