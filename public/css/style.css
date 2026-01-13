@@ -608,18 +608,20 @@ body {
 }
 
 .message-bubble {
-    background: white;
+    background: #E3F2FD;
     padding: 12px 16px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     word-wrap: break-word;
     position: relative;
+    border: 1px solid #BBDEFB;
 }
 
 .message-text {
-    color: #333;
+    color: #1565C0;
     line-height: 1.5;
     font-size: 14px;
+    font-weight: 500;
 }
 
 .message-actions {

@@ -1,10 +1,25 @@
 // Dashboard Functionality with Baku Time (UTC+4) and Auto-scroll
 
-const socket = io();
+const socket = io({
+    transports: ['websocket', 'polling']
+});
 let currentUser = null;
 let currentFaculty = null;
 let currentPrivateChat = null;
 let blockedUsers = new Set();
+
+// Socket connection events
+socket.on('connect', () => {
+    console.log('Socket connected:', socket.id);
+});
+
+socket.on('disconnect', () => {
+    console.log('Socket disconnected');
+});
+
+socket.on('connect_error', (error) => {
+    console.error('Socket connection error:', error);
+});
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -23,11 +38,14 @@ async function loadCurrentUser() {
         
         currentUser = await response.json();
         
+        console.log('Current user loaded:', currentUser);
+        
         // Update UI with user info
         updateUserProfile();
         
         // Join socket
         socket.emit('join', currentUser.id);
+        console.log('Sent join event with userId:', currentUser.id);
         
     } catch (error) {
         console.error('Error loading user:', error);
@@ -70,8 +88,17 @@ function initializeSocketListeners() {
     
     // Faculty message
     socket.on('faculty-message', (message) => {
-        if (currentFaculty === currentUser.faculty) {
+        console.log('Received faculty message:', message);
+        console.log('Current faculty:', currentFaculty);
+        console.log('User faculty:', currentUser?.faculty);
+        console.log('Message faculty:', message.faculty);
+        
+        // Only show messages if we're currently viewing the faculty chat
+        if (currentFaculty && message.faculty === currentFaculty) {
+            console.log('Appending message to chat');
             appendFacultyMessage(message);
+        } else {
+            console.log('Message not displayed - not in the right faculty chat');
         }
     });
     
@@ -163,10 +190,13 @@ async function showFaculties() {
 
 // Open Faculty Chat
 function openFacultyChat(faculty) {
+    console.log('Opening faculty chat:', faculty);
     hideAllSections();
     document.getElementById('chatSection').style.display = 'flex';
     document.getElementById('chatTitle').textContent = faculty;
     currentFaculty = faculty;
+    
+    console.log('currentFaculty set to:', currentFaculty);
     
     // Load messages
     socket.emit('get-faculty-messages', faculty);
@@ -194,7 +224,13 @@ function displayFacultyMessages(messages) {
 
 // Append Faculty Message
 function appendFacultyMessage(message, shouldScroll = true) {
+    console.log('appendFacultyMessage called with:', message);
     const container = document.getElementById('chatMessages');
+    if (!container) {
+        console.error('chatMessages container not found!');
+        return;
+    }
+    
     const isAtBottom = isScrolledToBottom(container);
     
     const messageDiv = document.createElement('div');
@@ -261,10 +297,12 @@ function appendFacultyMessage(message, shouldScroll = true) {
     messageDiv.appendChild(contentDiv);
     
     container.appendChild(messageDiv);
+    console.log('Message appended to DOM, total messages:', container.children.length);
     
     // Auto-scroll if user was at bottom or if it's a new message from current user
     if (shouldScroll && (isAtBottom || message.userId === currentUser.id)) {
         scrollToBottom(container);
+        console.log('Auto-scrolled to bottom');
     }
 }
 
@@ -275,6 +313,7 @@ function sendMessage() {
     
     if (!text) return;
     
+    console.log('Sending message:', text, 'to faculty:', currentFaculty);
     socket.emit('faculty-message', { text });
     input.value = '';
 }

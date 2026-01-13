@@ -10,20 +10,28 @@ const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    credentials: true
+  }
+});
 
 const PORT = process.env.PORT || 3000;
+
+// Session configuration
+const sessionMiddleware = session({
+  secret: 'bsu-chat-secret-2024',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+});
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({
-  secret: 'bsu-chat-secret-2024',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
-}));
+app.use(sessionMiddleware);
 
 // Static files
 app.use(express.static('public'));
@@ -491,19 +499,29 @@ app.post('/api/logout', (req, res) => {
   res.json({ success: true });
 });
 
+// Socket.IO with session support
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next);
+});
+
 // Socket.IO
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
   
   socket.on('join', (userId) => {
     const user = users.find(u => u.id === userId);
-    if (!user) return;
+    if (!user) {
+      console.log('User not found:', userId);
+      return;
+    }
     
     socket.userId = userId;
     socket.join(`user-${userId}`);
     
     // Join faculty room
     socket.join(`faculty-${user.faculty}`);
+    
+    console.log(`User ${user.fullName} joined room: faculty-${user.faculty}`);
     
     // Send current settings
     socket.emit('settings-updated', {
@@ -514,8 +532,17 @@ io.on('connection', (socket) => {
   
   // Faculty chat message
   socket.on('faculty-message', (data) => {
+    console.log('Faculty message received:', data, 'from userId:', socket.userId);
+    
     const user = users.find(u => u.id === socket.userId);
-    if (!user || !user.active) return;
+    if (!user) {
+      console.log('User not found for message');
+      return;
+    }
+    if (!user.active) {
+      console.log('User not active');
+      return;
+    }
     
     const message = {
       id: Date.now().toString(),
@@ -531,6 +558,8 @@ io.on('connection', (socket) => {
     
     messages.faculty[user.faculty].push(message);
     
+    console.log('Message saved, broadcasting to faculty:', user.faculty);
+    
     // Send to all users in faculty except blocked ones
     const facultyUsers = users.filter(u => u.faculty === user.faculty);
     facultyUsers.forEach(u => {
@@ -538,6 +567,8 @@ io.on('connection', (socket) => {
         io.to(`user-${u.id}`).emit('faculty-message', message);
       }
     });
+    
+    console.log('Message broadcasted to', facultyUsers.length, 'users');
   });
   
   // Private message
